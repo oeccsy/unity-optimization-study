@@ -21,7 +21,7 @@ Garbage Collection으로 인한 프레임 드랍은 치명적이다.
 
 ---  
 
-2. 오브젝트를 보관할 오브젝트 풀을 만든다.
+1. 오브젝트를 보관할 오브젝트 풀을 만든다.
 ```C#
     //ObjectPool.cs
 
@@ -81,7 +81,7 @@ Garbage Collection으로 인한 프레임 드랍은 치명적이다.
 * 다른 스크립트에서 Bullet의 인스턴스를 생성하고 싶은 경우 해당 static 함수를 호출하도록 한다.
 
 
-2. 오브젝트 사용이 끝나면 바로 파괴하지 않고 오브젝트 풀로 반납한다.
+3. 오브젝트 사용이 끝나면 바로 파괴하지 않고 오브젝트 풀로 반납한다.
 
 ```C#
     //ObjectPool.cs
@@ -92,7 +92,7 @@ Garbage Collection으로 인한 프레임 드랍은 치명적이다.
         Instance.poolingObjectQueue.Enqueue(bullet);
     }
 ```
-* static 함수 이기 때문에 transform이 아닌 Instance.transform을 인자로 전달한다.
+* static 함수 이기 때문에 transform이 아닌 Instance.transform을 인자로 전달한다.  
   여기서 Instance는 ObjectPool의 인스턴스인 static 변수이다.
 * 다른 스크립트에서 Bullet의 인스턴스를 제거하고 싶은 경우 해당 statid함수를 호출하여 반환하도록 한다.
 
@@ -101,12 +101,15 @@ Window -> Analysis -> Profiler 항목에서 성능분석을 확인할 수 있다.
 
 ![Image](../SampleApp/App_Optimization_1/Picture/Profiler1.png)
 
+<br>
+
 오브젝트의 생성과 파괴작업을 진행하면
 
 중간에 프레임이 튀는 부분이 생기는데, GarbageCollector의 영향이 적지 않음을 확인할 수 있다.
 
 ![Image2](../SampleApp/App_Optimization_1/Picture/Profiler2.png)
 
+<br>
 
 이때 최대로 사용할 수 있는 Bullet의 인스턴스까지 생성한 후  
 오브젝트 풀링을 이용하여 Bullet의 인스턴스를 관리하면 GarbageCollector 부분에 유의미한 변화를 확인할 수 있다.
